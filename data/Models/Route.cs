@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace UavRouter.Data
 {
+    /// <summary>
+    /// parent class for UAV properties
+    /// </summary>
     public class Route
     {
         [Key]
@@ -12,7 +15,6 @@ namespace UavRouter.Data
         public double EndLong { get; set; }
         public double EndLat { get; set; }
         public double Distance { get; set; }
-
         public ICollection<WayPoint>? Waypoints { get; set; }
     }
 
