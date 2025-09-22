@@ -4,8 +4,6 @@ using UavRouter.Data;
 public class UAVRouterContext : DbContext
 {
     public UAVRouterContext(DbContextOptions<UAVRouterContext> options) : base(options) { }
-
-    public DbSet<UAV> UAVs { get; set; }
     public DbSet<RotorUAV> RotorUAVs { get; set; }
     public DbSet<FixedWingUAV> FixedWingUAVs { get; set; }
     public DbSet<FlightRoute> FlightRoutes { get; set; }
@@ -48,43 +46,10 @@ public class UAVRouterContext : DbContext
                 PayLoadCapacityKg = 1,
                 NumOfRotors = 4,
                 Size = Size.Small
-            }
-        );
-
-        modelBuilder.Entity<FixedWingUAV>().HasData(
-            new FixedWingUAV
-            {
-                UavId = 3,
-                Make = "Autel",
-                Model = "Evo Lite",
-                Name = "RiverScout",
-                WeightKg = 3,
-                FuelCapacityKg = 2,
-                RangeKm = 10000,
-                TopSpeedKph = 50,
-                CruiseSpeedKph = 40,
-                MaxAltitudeMeters = 300,
-                PayLoadCapacityKg = 5,
-                WingSpanMeters = 2.5
-            },
-            new FixedWingUAV
-            {
-                UavId = 4,
-                Make = "Yuneec",
-                Model = "Typhoon H",
-                Name = "BathDrone1",
-                WeightKg = 2.5,
-                FuelCapacityKg = 1.5,
-                RangeKm = 8000,
-                TopSpeedKph = 45,
-                CruiseSpeedKph = 35.0,
-                MaxAltitudeMeters = 250.0,
-                PayLoadCapacityKg = 4,
-                WingSpanMeters = 2.2
             },
             new RotorUAV
             {
-                UavId = 5,
+                UavId = 3,
                 Make = "DJI",
                 Model = "Mavic Air 2",
                 Name = "BathDrone2",
@@ -100,18 +65,51 @@ public class UAVRouterContext : DbContext
             }
         );
 
+        modelBuilder.Entity<FixedWingUAV>().HasData(
+            new FixedWingUAV
+            {
+                UavId = 4,
+                Make = "Autel",
+                Model = "Evo Lite",
+                Name = "RiverScout",
+                WeightKg = 3,
+                FuelCapacityKg = 2,
+                RangeKm = 10000,
+                TopSpeedKph = 50,
+                CruiseSpeedKph = 40,
+                MaxAltitudeMeters = 300,
+                PayLoadCapacityKg = 5,
+                WingSpanMeters = 2.5
+            },
+            new FixedWingUAV
+            {
+                UavId = 5,
+                Make = "Yuneec",
+                Model = "Typhoon H",
+                Name = "BathDrone1",
+                WeightKg = 2.5,
+                FuelCapacityKg = 1.5,
+                RangeKm = 8000,
+                TopSpeedKph = 45,
+                CruiseSpeedKph = 35.0,
+                MaxAltitudeMeters = 250.0,
+                PayLoadCapacityKg = 4,
+                WingSpanMeters = 2.2
+            }
+        );
+
         // Seed FlightRoutes
         modelBuilder.Entity<FlightRoute>().HasData(
-            new FlightRoute { RouteId = 1, StartLat = 51.3813, StartLong = -2.3590, EndLat = 51.3815, EndLong = -2.3580, Distance = 2.0 },
-            new FlightRoute { RouteId = 2, StartLat = 51.3795, StartLong = -2.3600, EndLat = 51.3780, EndLong = -2.3620, Distance = 3.5 },
-            new FlightRoute { RouteId = 3, StartLat = 51.3840, StartLong = -2.3640, EndLat = 51.3850, EndLong = -2.3600, Distance = 4.0 },
-            new FlightRoute { RouteId = 4, StartLat = 51.3760, StartLong = -2.3550, EndLat = 51.3775, EndLong = -2.3585, Distance = 2.5 },
-            new FlightRoute { RouteId = 5, StartLat = 51.3830, StartLong = -2.3625, EndLat = 51.3820, EndLong = -2.3585, Distance = 3.0 },
-            new FlightRoute { RouteId = 6, StartLat = 51.3800, StartLong = -2.3560, EndLat = 51.3825, EndLong = -2.3590, Distance = 3.2 },
-            new FlightRoute { RouteId = 7, StartLat = 51.3790, StartLong = -2.3570, EndLat = 51.3800, EndLong = -2.3540, Distance = 2.8 },
-            new FlightRoute { RouteId = 8, StartLat = 51.3820, StartLong = -2.3610, EndLat = 51.3840, EndLong = -2.3640, Distance = 4.0 },
-            new FlightRoute { RouteId = 9, StartLat = 51.3810, StartLong = -2.3630, EndLat = 51.3830, EndLong = -2.3600, Distance = 3.5 },
-            new FlightRoute { RouteId = 10, StartLat = 51.3780, StartLong = -2.3590, EndLat = 51.3795, EndLong = -2.3570, Distance = 2.7 }
+            new FlightRoute { RouteId = 1, StartLat = 51.3813, StartLong = -2.3590, EndLat = 51.3815, EndLong = -2.3580, DistanceKm = 2.0 },
+            new FlightRoute { RouteId = 2, StartLat = 51.3795, StartLong = -2.3600, EndLat = 51.3780, EndLong = -2.3620, DistanceKm = 3.5 },
+            new FlightRoute { RouteId = 3, StartLat = 51.3840, StartLong = -2.3640, EndLat = 51.3850, EndLong = -2.3600, DistanceKm = 4.0 },
+            new FlightRoute { RouteId = 4, StartLat = 51.3760, StartLong = -2.3550, EndLat = 51.3775, EndLong = -2.3585, DistanceKm = 2.5 },
+            new FlightRoute { RouteId = 5, StartLat = 51.3830, StartLong = -2.3625, EndLat = 51.3820, EndLong = -2.3585, DistanceKm = 3.0 },
+            new FlightRoute { RouteId = 6, StartLat = 51.3800, StartLong = -2.3560, EndLat = 51.3825, EndLong = -2.3590, DistanceKm = 3.2 },
+            new FlightRoute { RouteId = 7, StartLat = 51.3790, StartLong = -2.3570, EndLat = 51.3800, EndLong = -2.3540, DistanceKm = 2.8 },
+            new FlightRoute { RouteId = 8, StartLat = 51.3820, StartLong = -2.3610, EndLat = 51.3840, EndLong = -2.3640, DistanceKm = 4.0 },
+            new FlightRoute { RouteId = 9, StartLat = 51.3810, StartLong = -2.3630, EndLat = 51.3830, EndLong = -2.3600, DistanceKm = 3.5 },
+            new FlightRoute { RouteId = 10, StartLat = 51.3780, StartLong = -2.3590, EndLat = 51.3795, EndLong = -2.3570, DistanceKm = 2.7 }
         );
 
         // Seed WayPoints (some routes with 2–3 extra waypoints)
