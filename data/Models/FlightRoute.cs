@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace UavRouter.Data
 {
-    /// <summary>
-    /// parent class for UAV properties
-    /// </summary>
+
+    // parent class for UAV properties
+
     public class FlightRoute
     {
         [Key]
