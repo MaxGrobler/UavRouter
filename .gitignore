@@ -1,0 +1,65 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+[Tt]emp/
+[Tt]empBackup/
+
+# Visual Studio / VS Code
+.vs/
+.vscode/
+
+# Rider / JetBrains
+.idea/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Generated files
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+*.db-shm
+*.db-wal
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Entity Framework Core Migrations build cache
+*MigrationsSnapshot.cs
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# macOS
+.DS_Store
+
+# npm / node modules (if using front-end JS or CSS)
+node_modules/
+dist/
+wwwroot/lib/
+
+# SQLite local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Other temporary or environment files
+.env
+*.swp
+*.tmp
+*.bak
+*.backup
+
+# Publish outputs
+publish/
+out/
