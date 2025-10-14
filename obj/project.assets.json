@@ -2335,11 +2335,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/maxgrobler/Documents/UavRouter/UavRouter.csproj",
+      "projectUniqueName": "/Users/maxgrobler/Documents/UAV Project/UavRouter/UavRouter.csproj",
       "projectName": "UavRouter",
-      "projectPath": "/Users/maxgrobler/Documents/UavRouter/UavRouter.csproj",
+      "projectPath": "/Users/maxgrobler/Documents/UAV Project/UavRouter/UavRouter.csproj",
       "packagesPath": "/Users/maxgrobler/.nuget/packages/",
-      "outputPath": "/Users/maxgrobler/Documents/UavRouter/obj/",
+      "outputPath": "/Users/maxgrobler/Documents/UAV Project/UavRouter/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/maxgrobler/.nuget/NuGet/NuGet.Config"

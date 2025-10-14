@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UavRouter")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ec87e9977b1ab725f07da5123b62e7cf597635a5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c6332a609fd3e49aec03300eba06fb07c46e53d0")]
 [assembly: System.Reflection.AssemblyProductAttribute("UavRouter")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UavRouter")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
