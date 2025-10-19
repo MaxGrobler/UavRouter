@@ -2,6 +2,7 @@ using System.Linq;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.ObjectPool;
 using UavRouter.Data;
 
 [ApiController]
@@ -36,8 +37,43 @@ public class UavRouteController : ControllerBase
         {
             Console.WriteLine($"Lat: {p.Latitude}, Lng: {p.Longitude}, Alt: {p.AltitudeMeters}");
         }
-        return Ok(Points);
 
+
+
+        List<double> lats = new List<double>();
+        List<double> longs = new List<double>();
+
+
+        for (int a = 0; a < Points.Length; a++)
+        {
+            lats.Add(Points[a].Latitude);
+            longs.Add(Points[a].Longitude);
+
+        }
+
+        List<double> newLats = new List<double>();
+        List<double> newLongs = new List<double>();
+        for (int b = 1; b < lats.Count; b++)
+        {
+            newLats.Add(lats[b - 1]);
+            newLongs.Add(longs[b - 1]);
+
+            newLats.Add(lats[b - 1] + (lats[b] - lats[b - 1]) / 2);
+            newLongs.Add(longs[b - 1] + (longs[b] - longs[b - 1]) / 2);
+        }
+        newLats.Add(lats[^1]);
+        newLongs.Add(longs[^1]);
+
+        WayPoint[] NewWayPoints = new WayPoint[newLats.Count];
+        for(int i = 0; i < newLats.Count; i++)
+        {
+            WayPoint newWaypoint = new WayPoint { Latitude = newLats[i], Longitude = newLongs[i] };
+            NewWayPoints[i] = newWaypoint;
+            Console.WriteLine($"{newWaypoint.Latitude} {newWaypoint.Longitude}");
+        }
+        Console.WriteLine(NewWayPoints.Length);
+        return Ok(NewWayPoints);
+    
     }
 
 
