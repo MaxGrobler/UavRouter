@@ -8,6 +8,10 @@ public class UAVRouterContext : DbContext
     public DbSet<FixedWingUAV> FixedWingUAVs { get; set; }
     public DbSet<FlightRoute> FlightRoutes { get; set; }
     public DbSet<WayPoint> WayPoints { get; set; }
+    public DbSet<Risk> Risks { get; set; }
+    public DbSet<MapFeature> MapFeatures { get; set; }
+
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
