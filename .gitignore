@@ -63,3 +63,9 @@ wwwroot/lib/
 # Publish outputs
 publish/
 out/
+
+# SQLite DB files (local only)
+uavrouter.db
+uavrouter.db-*
+*.db
+*.db-*
