@@ -49,9 +49,9 @@ dist/
 wwwroot/lib/
 
 # SQLite local databases
-*.db
-*.sqlite
-*.sqlite3
+#*.db
+#*.sqlite
+#*.sqlite3
 
 # Other temporary or environment files
 .env

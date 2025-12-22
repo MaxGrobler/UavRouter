@@ -52,7 +52,7 @@ public class UavRouteController : ControllerBase
 
         SafteyBox box = GetSafetyBox(points);
         List<MapFeature> mapFeatures = GetThingsToAvoid(box.minimumLat, box.maximumLat, box.minimumLon, box.maximumLon);
-        WayPoint[] newRoute = CheckAlongRoute(points, mapFeatures, 10, 250.0);
+        WayPoint[] newRoute = CheckAlongRoute(points, mapFeatures, 0.25, 250.0);
         return newRoute;
     }
 
@@ -150,10 +150,12 @@ public class UavRouteController : ControllerBase
 
         var list_latlons = new List<(double lat, double lon)>();
 
-        for (int i = 0; i < lats.Count; i++)
+
+        for (int i = 0; i < newLats.Count; i++)
         {
-            list_latlons.Add((lats[i], longs[i]));
+            list_latlons.Add((newLats[i], newLongs[i]));
         }
+
 
         var minLong = list_latlons.MinBy(p => p.lon);
         var maxLong = list_latlons.MaxBy(p => p.lon);
@@ -188,8 +190,38 @@ public class UavRouteController : ControllerBase
                 new SqliteParameter("$maxLon", maximumLon))
             .ToList();//adds objects to avoid to list
 
+        foreach (MapFeature ting in Avoidance)
+        {
+            Console.WriteLine($"things to avoid: {ting}");
+        }
+
         return Avoidance;
     }
+
+
+    [HttpPost("GetDanger")]
+    public IActionResult PutDataOnMap([FromBody] JsonElement myjsonstring)
+    {
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };//need for case sensitivity 
+        var points = JsonSerializer.Deserialize<WayPoint[]>(myjsonstring, options);
+
+        if (points == null)
+        {
+            return BadRequest("empty data");
+        }
+
+        List<MapFeature> danger = GetDangerPoints(points);
+        return Ok(danger);
+
+    }
+
+    private List<MapFeature> GetDangerPoints(WayPoint[] points)
+    {
+        SafteyBox box = GetSafetyBox(points);
+        List<MapFeature> mapFeatures = GetThingsToAvoid(box.minimumLat, box.maximumLat, box.minimumLon, box.maximumLon);
+        return mapFeatures;
+    }
+
     public bool CheckAvoidHazard(double latitude, double longitude, List<MapFeature> mapFeatures, double avoidanceDistance)
     {
         for (int i = 0; i < mapFeatures.Count; i++)
@@ -207,7 +239,7 @@ public class UavRouteController : ControllerBase
         return false;
     }
 
-    private WayPoint[] CheckAlongRoute(WayPoint[] origionalRoute, List<MapFeature> mapFeatures, int stepDistance, double avoidanceDistance)
+    private WayPoint[] CheckAlongRoute(WayPoint[] origionalRoute, List<MapFeature> mapFeatures, double stepDistance, double avoidanceDistance)
     {
 
         List<double> lats = new List<double>();
@@ -249,7 +281,7 @@ public class UavRouteController : ControllerBase
 
             double pointDistance = Math.Sqrt(Math.Pow(xs, 2) + Math.Pow(ys, 2));
 
-            int RelativeStep = Convert.ToInt32(pointDistance) / stepDistance;
+            double RelativeStep = Convert.ToInt32(pointDistance) / stepDistance;
 
             for (int a = 0; a < RelativeStep; a++)
             {
@@ -267,7 +299,7 @@ public class UavRouteController : ControllerBase
                 if (CheckAvoidHazard(latCheck, lonCheck, mapFeatures, avoidanceDistance))
                 {
                     // hazard detected along route — return a reroute signal (replace with actual reroute logic)
-                    WayPoint[] newRoute = FindWayAround(origionalRoute, latCheck, lonCheck, stepDistance, avoidanceDistance, mapFeatures ,1);
+                    WayPoint[] newRoute = FindWayAround(origionalRoute, latCheck, lonCheck, stepDistance, avoidanceDistance, mapFeatures, 1);
                     return newRoute;
                 }
             }
@@ -277,7 +309,7 @@ public class UavRouteController : ControllerBase
         return origionalRoute;
     }
 
-    private WayPoint[] FindWayAround(WayPoint[] wholeRoute, double latAvoid, double longAvoid, int stepDistance, double avoidanceDistance, List<MapFeature> mapFeatures, int attempts)
+    private WayPoint[] FindWayAround(WayPoint[] wholeRoute, double latAvoid, double longAvoid, double stepDistance, double avoidanceDistance, List<MapFeature> mapFeatures, int attempts)
     {
         //take the route given and try adding an extra point a distance of attempts*distance (so 1*5 to start) the route where the avoidance coords are
         //if it works return the new route including that new point
@@ -395,7 +427,7 @@ public class UavRouteController : ControllerBase
                     return newWholeRoute;
                 }
                 int newAttempts = attempts + 1;
-                return FindWayAround(wholeRoute, latAvoid, longAvoid, stepDistance, avoidanceDistance, mapFeatures, newAttempts );
+                return FindWayAround(wholeRoute, latAvoid, longAvoid, stepDistance, avoidanceDistance, mapFeatures, newAttempts);
             }
         }
         return wholeRoute;//TODO fix this
@@ -406,4 +438,3 @@ public class UavRouteController : ControllerBase
 
 //TODO save route function 
 //TODO Calculations
- 
