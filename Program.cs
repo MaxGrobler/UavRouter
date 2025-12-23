@@ -22,7 +22,6 @@ app.Run();
 
 
 //TODO:
-//plan route button greyed until risk shown
 //chose drone for flight first
 //calculate if it can make it
 //any final UI clean
