@@ -1,4 +1,3 @@
-
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
@@ -51,7 +50,7 @@ public class UavRouteController : ControllerBase
         List<MapFeature> mapFeatures = GetThingsToAvoid(circleShape.centerLat, circleShape.centerLon, circleShape.radiusMeters);
         //Check the route from A to B and add new points to avoid stuff if anything is in the way.
         //So A to B can become A to A2 to A3 to B.
-        WayPoint[] newRoute = CheckAlongRoute(points, mapFeatures, 250.0, 500.0);
+        WayPoint[] newRoute = CheckAlongRoute(points, mapFeatures, 250.0, 250.0);
         return newRoute;
     }
 
@@ -212,7 +211,7 @@ public class UavRouteController : ControllerBase
 
         //this bit stops us getting stuck in a forever loop which takes ages and can sometimes crash so i set it to 10 but you could 
         //make this bigger and see hwo big it could go. for me this works now.
-        for (int attempt = 1; attempt <= 100; attempt++)
+        for (int attempt = 1; attempt <= 1000; attempt++)
         {
             //I havent changed anything in the route yet.
             bool changedThisAttempt = false;
@@ -277,7 +276,7 @@ public class UavRouteController : ControllerBase
                             stepDistance,
                             avoidanceDistance,
                             mapFeatures,
-                            attempt
+                            1
                         );
 
                         // stick the rest of the route we havent checked yet back on.
@@ -324,7 +323,7 @@ public class UavRouteController : ControllerBase
         // attempt=250m
         // attempt=500m
         // up to 10
-        if (attemptIndex > 100)
+        if (attemptIndex > 1000)
             return wholeRoute;
 
         // We only ever try to the route the last section
@@ -369,14 +368,18 @@ public class UavRouteController : ControllerBase
         double perpendicularUnitX = -segmentDeltaY / segmentLengthMeters;
         double perpendicularUnitY = segmentDeltaX / segmentLengthMeters;
 
-        for (int k = attemptIndex; k <= 10; k++)
+        //working out how far to try jumpimng
+        double moveBy25Meters = avoidanceDistanceMeters + 25.0;
+        double addFiftyEveryTime = 50.0;
+
+        for (int k = 0; k < 200; k++)
         {
-            double offsetDistanceMeters = stepDistanceMeters * k;
+            double addMultiply = moveBy25Meters + addFiftyEveryTime * k;
 
             // First try a point on one side of the segment
             var newPointA = MakeWaypoint(
-                thingToAvoidXMeters + perpendicularUnitX * offsetDistanceMeters,
-                thingToAvoidYMeters + perpendicularUnitY * offsetDistanceMeters,
+                thingToAvoidXMeters + perpendicularUnitX * addMultiply,
+                thingToAvoidYMeters + perpendicularUnitY * addMultiply,
                 EarthRadiusMeters,
                 cosMidLatitude
             );
@@ -396,8 +399,8 @@ public class UavRouteController : ControllerBase
 
             // Then try the opposite side
             var newPointB = MakeWaypoint(
-                thingToAvoidXMeters - perpendicularUnitX * offsetDistanceMeters,
-                thingToAvoidYMeters - perpendicularUnitY * offsetDistanceMeters,
+                thingToAvoidXMeters - perpendicularUnitX * addMultiply,
+                thingToAvoidYMeters - perpendicularUnitY * addMultiply,
                 EarthRadiusMeters,
                 cosMidLatitude
             );
@@ -440,8 +443,11 @@ public class UavRouteController : ControllerBase
             return false;
 
         bool firstLegSafe = SegmentIsSafe(start, mid, mapFeatures, stepDistance, avoidanceDistance);
-        
-        bool result = firstLegSafe; 
+        if (!firstLegSafe) return false;
+
+        bool secondLegSafe = SegmentIsSafe(mid, end, mapFeatures, stepDistance, avoidanceDistance);
+
+        bool result = secondLegSafe;
         return result;
 
     }
